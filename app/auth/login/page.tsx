@@ -140,7 +140,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-gray-500 mt-6">
             Don't have an account?{' '}
-            <a href="/auth/register" className="text-brand font-medium hover:underline">
+            <a href="/plan-finder" className="text-brand font-medium hover:underline">
               Start free trial
             </a>
           </p>
