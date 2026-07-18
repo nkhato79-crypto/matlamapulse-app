@@ -1,7 +1,33 @@
 import { createClient } from '@/lib/supabase/server'
+import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
+import UpgradeGate from '@/components/UpgradeGate'
 
 export default async function ReportsPage() {
   const supabase = createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  let tier: PlanTier = 'standard'
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('organization_id')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.organization_id) {
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('subscription_tier')
+        .eq('id', profile.organization_id)
+        .single()
+      if (org?.subscription_tier) tier = org.subscription_tier as PlanTier
+    }
+  }
+
+  if (!PLAN_FEATURES[tier].hasReports) {
+    return <UpgradeGate currentTier={tier} requiredTier="pro" feature="Reports" />
+  }
 
   const [{ data: events }, { data: tasks }, { data: vendors }] = await Promise.all([
     supabase.from('events').select('*'),
@@ -36,7 +62,6 @@ export default async function ReportsPage() {
       </div>
 
       <div className="p-6">
-        {/* Summary Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {stats.map(({ label, value, sub, borderColor }) => (
             <div key={label} className="bg-white rounded-lg p-5 flex items-start gap-3">
@@ -51,7 +76,6 @@ export default async function ReportsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Task Breakdown */}
           <div className="bg-white rounded-lg p-5">
             <h2 className="font-semibold text-[#1a1a1f] text-sm mb-4">Task Status Breakdown</h2>
             <div className="space-y-3">
@@ -73,7 +97,6 @@ export default async function ReportsPage() {
             </div>
           </div>
 
-          {/* Event Status */}
           <div className="bg-white rounded-lg p-5">
             <h2 className="font-semibold text-[#1a1a1f] text-sm mb-4">Event Status</h2>
             <div className="space-y-3">

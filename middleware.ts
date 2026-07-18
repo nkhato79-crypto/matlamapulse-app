@@ -29,7 +29,8 @@ export async function middleware(request: NextRequest) {
 
   const isPublicRoute =
     request.nextUrl.pathname.startsWith('/auth') ||
-    request.nextUrl.pathname.startsWith('/plan-finder')
+    request.nextUrl.pathname.startsWith('/plan-finder') ||
+    request.nextUrl.pathname.startsWith('/api/auth')
 
   // Redirect unauthenticated users to login
   if (!user && !isPublicRoute) {
