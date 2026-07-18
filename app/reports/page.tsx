@@ -1,0 +1,129 @@
+import { createClient } from '@/lib/supabase/server'
+import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
+import UpgradeGate from '@/components/UpgradeGate'
+
+export default async function ReportsPage() {
+  const supabase = createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  let tier: PlanTier = 'standard'
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('organization_id')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.organization_id) {
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('subscription_tier')
+        .eq('id', profile.organization_id)
+        .single()
+      if (org?.subscription_tier) tier = org.subscription_tier as PlanTier
+    }
+  }
+
+  if (!PLAN_FEATURES[tier].hasReports) {
+    return <UpgradeGate currentTier={tier} requiredTier="pro" feature="Reports" />
+  }
+
+  const [{ data: events }, { data: tasks }, { data: vendors }] = await Promise.all([
+    supabase.from('events').select('*'),
+    supabase.from('tasks').select('*'),
+    supabase.from('vendors').select('id'),
+  ])
+
+  const totalEvents = events?.length ?? 0
+  const activeEvents = events?.filter(e => e.status === 'active').length ?? 0
+  const completedEvents = events?.filter(e => e.status === 'completed').length ?? 0
+  const totalBudget = events?.reduce((sum, e) => sum + (Number(e.budget) || 0), 0) ?? 0
+
+  const totalTasks = tasks?.length ?? 0
+  const completedTasks = tasks?.filter(t => t.status === 'completed').length ?? 0
+  const pendingTasks = tasks?.filter(t => t.status === 'pending').length ?? 0
+  const overdueTasks = tasks?.filter(t => t.status !== 'completed' && t.due_date && new Date(t.due_date) < new Date()).length ?? 0
+
+  const totalVendors = vendors?.length ?? 0
+  const taskCompletionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+
+  const stats = [
+    { label: 'Total Events', value: totalEvents, sub: `${activeEvents} active, ${completedEvents} completed`, borderColor: 'bg-brand' },
+    { label: 'Total Budget', value: `R${totalBudget.toLocaleString('en-ZA')}`, sub: 'Across all events', borderColor: 'bg-[#3399db]' },
+    { label: 'Task Completion', value: `${taskCompletionRate}%`, sub: `${completedTasks}/${totalTasks} tasks done`, borderColor: 'bg-[#33c759]' },
+    { label: 'Vendors', value: totalVendors, sub: 'In your database', borderColor: 'bg-[#f5a624]' },
+  ]
+
+  return (
+    <div>
+      <div className="bg-white px-8 h-16 flex items-center border-b border-[#e5e5eb]">
+        <h1 className="text-xl font-bold text-[#1a1a1f]">Reports</h1>
+      </div>
+
+      <div className="p-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {stats.map(({ label, value, sub, borderColor }) => (
+            <div key={label} className="bg-white rounded-lg p-5 flex items-start gap-3">
+              <div className={`${borderColor} w-1.5 rounded-full self-stretch`} />
+              <div>
+                <p className="text-xs text-[#80808c]">{label}</p>
+                <p className="text-2xl font-bold text-[#1a1a1f] leading-tight">{value}</p>
+                <p className="text-[11px] text-[#80808c] mt-1">{sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-white rounded-lg p-5">
+            <h2 className="font-semibold text-[#1a1a1f] text-sm mb-4">Task Status Breakdown</h2>
+            <div className="space-y-3">
+              {[
+                { label: 'Pending', count: pendingTasks, color: 'bg-[#f5a624]' },
+                { label: 'Completed', count: completedTasks, color: 'bg-[#33c759]' },
+                { label: 'Overdue', count: overdueTasks, color: 'bg-[#d94536]' },
+              ].map(({ label, count, color }) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-[13px] text-[#26262e]">{label}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-32 bg-[#ededf2] rounded-full h-2">
+                      <div className={`${color} h-2 rounded-full`} style={{ width: `${totalTasks > 0 ? (count / totalTasks) * 100 : 0}%` }} />
+                    </div>
+                    <span className="text-[13px] font-semibold text-[#1a1a1f] w-8 text-right">{count}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg p-5">
+            <h2 className="font-semibold text-[#1a1a1f] text-sm mb-4">Event Status</h2>
+            <div className="space-y-3">
+              {[
+                { status: 'draft', color: 'bg-[#a6a6b2]' },
+                { status: 'planning', color: 'bg-[#3399db]' },
+                { status: 'active', color: 'bg-[#33c759]' },
+                { status: 'completed', color: 'bg-purple-500' },
+                { status: 'cancelled', color: 'bg-[#d94536]' },
+              ].map(({ status, color }) => {
+                const count = events?.filter(e => e.status === status).length ?? 0
+                return (
+                  <div key={status} className="flex items-center justify-between">
+                    <span className="text-[13px] text-[#26262e] capitalize">{status}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-32 bg-[#ededf2] rounded-full h-2">
+                        <div className={`${color} h-2 rounded-full`} style={{ width: `${totalEvents > 0 ? (count / totalEvents) * 100 : 0}%` }} />
+                      </div>
+                      <span className="text-[13px] font-semibold text-[#1a1a1f] w-8 text-right">{count}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
