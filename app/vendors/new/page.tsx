@@ -1,14 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NewVendorPage() {
   const router = useRouter()
-  const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     name: '',
@@ -28,28 +26,16 @@ export default function NewVendorPage() {
     e.preventDefault()
     setLoading(true)
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/auth/login'); return }
+    const res = await fetch('/api/vendors', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single()
+    const data = await res.json()
 
-    if (!profile?.organization_id) {
-      alert('No organization found. Please complete your profile setup.')
-      setLoading(false)
-      return
-    }
-
-    const { data, error } = await supabase.from('vendors').insert({
-      ...form,
-      organization_id: profile.organization_id,
-    }).select().single()
-
-    if (error) {
-      alert(error.message)
+    if (!res.ok) {
+      alert(data.error || 'Failed to add vendor')
       setLoading(false)
     } else {
       router.push(`/vendors/${data.id}`)
