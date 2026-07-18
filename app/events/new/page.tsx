@@ -141,6 +141,15 @@ export default function NewEventPage() {
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-dark mb-1.5">End Date</label>
+              <input
+                type="date"
+                value={form.end_date}
+                onChange={e => update('end_date', e.target.value)}
+                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+              />
+            </div>
           </div>
         </div>
 

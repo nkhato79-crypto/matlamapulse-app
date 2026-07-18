@@ -10,7 +10,7 @@ export default async function DashboardPage() {
     { data: vendors },
     { data: tasks },
   ] = await Promise.all([
-    supabase.from('events').select('*').order('event_date', { ascending: true }),
+    supabase.from('events').select('*').order('event_date', { ascending: true }).limit(10),
     supabase.from('vendors').select('id'),
     supabase.from('tasks').select('*'),
   ])

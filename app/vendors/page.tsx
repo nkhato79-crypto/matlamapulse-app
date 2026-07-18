@@ -1,15 +1,31 @@
-import { createClient } from '@/lib/supabase/server'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { Plus, Star, Phone, Mail } from 'lucide-react'
 
-export default async function VendorsPage() {
+export default function VendorsPage() {
   const supabase = createClient()
-  const { data: vendors } = await supabase
-    .from('vendors')
-    .select('*')
-    .order('name', { ascending: true })
+  const [vendors, setVendors] = useState<any[] | null>(null)
+  const [filter, setFilter] = useState('all')
 
-  const categories = [...new Set(vendors?.map(v => v.category).filter(Boolean))]
+  useEffect(() => {
+    async function fetchVendors() {
+      const { data } = await supabase
+        .from('vendors')
+        .select('*')
+        .order('name', { ascending: true })
+      setVendors(data)
+    }
+    fetchVendors()
+  }, [])
+
+  const categories = Array.from(new Set(vendors?.map((v: any) => v.category).filter(Boolean) ?? []))
+
+  const filteredVendors = vendors?.filter(v =>
+    filter === 'all' ? true : v.category === filter
+  )
 
   return (
     <div className="p-8">
@@ -30,27 +46,50 @@ export default async function VendorsPage() {
       {/* Category filters */}
       {categories.length > 0 && (
         <div className="flex gap-2 mb-6 flex-wrap">
-          <button className="px-4 py-2 rounded-lg text-sm font-medium bg-brand text-white">All</button>
+          <button
+            onClick={() => setFilter('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filter === 'all'
+                ? 'bg-brand text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+            }`}
+          >
+            All
+          </button>
           {categories.map(cat => (
-            <button key={cat} className="px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-600 hover:bg-gray-50 border border-gray-200">
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === cat
+                  ? 'bg-brand text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
               {cat}
             </button>
           ))}
         </div>
       )}
 
-      {!vendors || vendors.length === 0 ? (
+      {!filteredVendors || filteredVendors.length === 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 py-20 text-center">
           <Star size={40} className="text-gray-200 mx-auto mb-4" />
-          <h3 className="font-semibold text-dark mb-1">No vendors yet</h3>
-          <p className="text-gray-500 text-sm mb-4">Add vendors to your database to assign them to events</p>
-          <Link
-            href="/vendors/new"
-            className="inline-flex items-center gap-2 bg-brand text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-brand-dark transition-colors"
-          >
-            <Plus size={15} />
-            Add Vendor
-          </Link>
+          <h3 className="font-semibold text-dark mb-1">
+            {filter === 'all' ? 'No vendors yet' : `No vendors in "${filter}"`}
+          </h3>
+          <p className="text-gray-500 text-sm mb-4">
+            {filter === 'all' ? 'Add vendors to your database to assign them to events' : 'No vendors match this category'}
+          </p>
+          {filter === 'all' && (
+            <Link
+              href="/vendors/new"
+              className="inline-flex items-center gap-2 bg-brand text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-brand-dark transition-colors"
+            >
+              <Plus size={15} />
+              Add Vendor
+            </Link>
+          )}
         </div>
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100">
@@ -66,7 +105,7 @@ export default async function VendorsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {vendors.map(vendor => (
+              {filteredVendors.map(vendor => (
                 <tr key={vendor.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
