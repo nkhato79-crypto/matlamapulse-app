@@ -76,21 +76,21 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <p className="text-gray-400 text-sm">Loading...</p>
+      <div className="bg-white px-8 h-16 flex items-center border-b border-[#e5e5eb]">
+        <p className="text-[#80808c] text-sm">Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="p-8 max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-dark">Settings</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage your profile and organization</p>
+    <div>
+      <div className="bg-white px-8 h-16 flex items-center border-b border-[#e5e5eb]">
+        <h1 className="text-xl font-bold text-[#1a1a1f]">Settings</h1>
       </div>
 
+      <div className="p-6 max-w-3xl">
       {/* Profile */}
-      <form onSubmit={handleSaveProfile} className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+      <form onSubmit={handleSaveProfile} className="bg-white rounded-lg p-6 mb-6">
         <h2 className="font-semibold text-dark mb-4">Your Profile</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
@@ -130,7 +130,7 @@ export default function SettingsPage() {
 
       {/* Organization */}
       {organization && (
-        <form onSubmit={handleSaveOrg} className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+        <form onSubmit={handleSaveOrg} className="bg-white rounded-lg p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-dark">Organization</h2>
             <span className="text-xs font-semibold text-brand bg-brand-muted px-2.5 py-1 rounded-full capitalize">
@@ -186,20 +186,21 @@ export default function SettingsPage() {
 
       {/* Subscription Info */}
       {organization && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-dark mb-4">Subscription</h2>
-          <div className="flex items-center gap-4">
+        <div className="bg-white rounded-lg p-6">
+          <h2 className="font-semibold text-[#1a1a1f] mb-4">Subscription</h2>
+          <div className="flex items-center gap-8">
             <div>
-              <p className="text-sm text-gray-500">Current Plan</p>
-              <p className="text-lg font-bold text-dark capitalize">{organization.subscription_tier}</p>
+              <p className="text-[11px] text-[#80808c]">Current Plan</p>
+              <p className="text-lg font-bold text-[#1a1a1f] capitalize">{organization.subscription_tier}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Status</p>
-              <p className="text-lg font-bold text-dark capitalize">{organization.subscription_status}</p>
+              <p className="text-[11px] text-[#80808c]">Status</p>
+              <p className="text-lg font-bold text-[#1a1a1f] capitalize">{organization.subscription_status}</p>
             </div>
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

@@ -68,18 +68,15 @@ export default function NewEventPage() {
     setForm(prev => ({ ...prev, [field]: value }))
 
   return (
-    <div className="p-8 max-w-3xl">
-      <div className="flex items-center gap-3 mb-8">
-        <Link href="/events" className="text-gray-400 hover:text-dark">
+    <div>
+      <div className="bg-white px-8 h-16 flex items-center gap-3 border-b border-[#e5e5eb]">
+        <Link href="/events" className="text-[#80808c] hover:text-[#26262e] transition-colors">
           <ArrowLeft size={18} />
         </Link>
-        <div>
-          <h1 className="text-2xl font-bold text-dark">New Event</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Fill in the event details below</p>
-        </div>
+        <h1 className="text-xl font-bold text-[#1a1a1f]">New Event</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="p-6 max-w-3xl space-y-6">
         {/* Basic Info */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="font-semibold text-dark mb-4">Basic Information</h2>
