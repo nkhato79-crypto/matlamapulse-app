@@ -1,0 +1,11 @@
+output/
+assets/*.mp4
+assets/*.mp3
+assets/*.jpg
+assets/*.png
+!assets/.gitkeep
+.env
+token.json
+client_secrets.json
+__pycache__/
+*.pyc
