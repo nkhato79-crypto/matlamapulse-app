@@ -69,47 +69,39 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-dark-sidebar flex">
-      {/* Left — branding */}
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 bg-dark-sidebar">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">EP</span>
+            <span className="text-white font-bold text-sm">ET</span>
           </div>
-          <span className="text-white font-semibold text-lg">EventPulse</span>
+          <span className="text-white font-semibold text-lg">Engage Terminal</span>
         </div>
 
         <div>
           <h1 className="text-4xl font-bold text-white leading-tight mb-4">
-            Vendor coordination,<br />
-            <span className="text-brand">finally simple.</span>
+            Creator clusters,<br />
+            <span className="text-brand">maximum reach.</span>
           </h1>
           <p className="text-gray-400 text-lg">
-            Manage vendors, track tasks, send WhatsApp RSVPs — all in one place built for SA event planners.
+            Matlama Marketing Concepts — managing micro-influencer campaigns, tracking deliverables, and automating cross-platform posting.
           </p>
         </div>
 
-        <div className="flex gap-8 text-sm text-gray-500">
-          <span>500+ Events managed</span>
-          <span>48+ Vendor categories</span>
-          <span>WhatsApp RSVP built-in</span>
-        </div>
+        <p className="text-sm text-gray-500">Matlama Marketing Concepts &mdash; Internal Use Only</p>
       </div>
 
-      {/* Right — login form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-sm">
-          {/* Mobile logo */}
           <div className="flex lg:hidden items-center gap-3 mb-8">
             <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">EP</span>
+              <span className="text-white font-bold text-sm">ET</span>
             </div>
-            <span className="font-semibold text-lg">EventPulse</span>
+            <span className="font-semibold text-lg">Engage Terminal</span>
           </div>
 
           <h2 className="text-2xl font-bold text-dark mb-2">Welcome back</h2>
-          <p className="text-gray-500 mb-8">Sign in to your EventPulse account</p>
+          <p className="text-gray-500 mb-8">Sign in to your Engage Terminal account</p>
 
-          {/* Google Sign In */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
@@ -134,7 +126,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="you@company.co.za"
+                placeholder="you@matlama.co.za"
                 required
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />
@@ -175,13 +167,6 @@ export default function LoginPage() {
           >
             Email me a login link instead
           </button>
-
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Don&apos;t have an account?{' '}
-            <a href="/plan-finder" className="text-brand font-medium hover:underline">
-              Start free trial
-            </a>
-          </p>
         </div>
       </div>
     </div>

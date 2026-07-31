@@ -1,10 +1,10 @@
 export type SubscriptionTier = 'standard' | 'pro' | 'max'
 export type SubscriptionStatus = 'trial' | 'active' | 'cancelled' | 'expired'
-export type EventStatus = 'draft' | 'planning' | 'active' | 'completed' | 'cancelled'
-export type VendorAssignmentStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled'
-export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled'
-export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent'
-export type RSVPStatus = 'pending' | 'confirmed' | 'declined' | 'maybe'
+export type CampaignStatus = 'draft' | 'planning' | 'active' | 'completed' | 'cancelled'
+export type CreatorAssignmentStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled'
+export type DeliverableStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled'
+export type DeliverablePriority = 'low' | 'medium' | 'high' | 'urgent'
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'revision'
 export type UserRole = 'owner' | 'admin' | 'member'
 
 export interface Organization {
@@ -37,7 +37,7 @@ export interface Profile {
   updated_at: string
 }
 
-export interface Event {
+export interface Campaign {
   id: string
   organization_id: string
   created_by?: string
@@ -51,7 +51,7 @@ export interface Event {
   venue_city?: string
   guest_count: number
   budget?: number
-  status: EventStatus
+  status: CampaignStatus
   event_type?: string
   cover_image_url?: string
   notes?: string
@@ -59,7 +59,7 @@ export interface Event {
   updated_at: string
 }
 
-export interface Vendor {
+export interface Creator {
   id: string
   organization_id: string
   name: string
@@ -78,12 +78,12 @@ export interface Vendor {
   updated_at: string
 }
 
-export interface VendorAssignment {
+export interface CreatorAssignment {
   id: string
   event_id: string
   vendor_id: string
   organization_id: string
-  status: VendorAssignmentStatus
+  status: CreatorAssignmentStatus
   quoted_amount?: number
   agreed_amount?: number
   deposit_amount?: number
@@ -92,10 +92,10 @@ export interface VendorAssignment {
   confirmed_at?: string
   created_at: string
   updated_at: string
-  vendor?: Vendor
+  vendor?: Creator
 }
 
-export interface Task {
+export interface Deliverable {
   id: string
   event_id: string
   organization_id: string
@@ -104,26 +104,26 @@ export interface Task {
   title: string
   description?: string
   category?: string
-  status: TaskStatus
-  priority: TaskPriority
+  status: DeliverableStatus
+  priority: DeliverablePriority
   due_date?: string
   completed_at?: string
   created_at: string
   updated_at: string
 }
 
-export interface RSVPResponse {
+export interface ContentApproval {
   id: string
   event_id: string
   vendor_assignment_id?: string
   organization_id: string
   recipient_name?: string
   recipient_phone: string
-  recipient_type: 'vendor' | 'guest'
+  recipient_type: 'brand' | 'creator'
   message_sent?: string
   message_sid?: string
   response?: string
-  rsvp_status: RSVPStatus
+  rsvp_status: ApprovalStatus
   sent_at?: string
   responded_at?: string
   created_at: string

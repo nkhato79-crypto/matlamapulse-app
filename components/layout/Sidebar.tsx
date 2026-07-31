@@ -1,119 +1,68 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
 import {
-  LayoutDashboard, Calendar, Users, CheckSquare,
-  BarChart2, Settings, LogOut, Zap, Lock
+  LayoutDashboard, Megaphone, Users, ListChecks,
+  BarChart2, Settings, LogOut, Zap
 } from 'lucide-react'
 
 const nav = [
-  { href: '/dashboard', label: 'Dashboard',  icon: LayoutDashboard, gate: null },
-  { href: '/events',    label: 'Events',     icon: Calendar,        gate: null },
-  { href: '/vendors',   label: 'Vendors',    icon: Users,           gate: null },
-  { href: '/tasks',     label: 'Tasks',      icon: CheckSquare,     gate: null },
-  { href: '/reports',   label: 'Reports',    icon: BarChart2,       gate: 'hasReports' as const },
-  { href: '/settings',  label: 'Settings',   icon: Settings,        gate: null },
+  { href: '/dashboard', label: 'Dashboard',    icon: LayoutDashboard },
+  { href: '/events',    label: 'Campaigns',     icon: Megaphone },
+  { href: '/vendors',   label: 'Creators',      icon: Users },
+  { href: '/tasks',     label: 'Deliverables',  icon: ListChecks },
+  { href: '/reports',   label: 'Analytics',     icon: BarChart2 },
+  { href: '/settings',  label: 'Settings',      icon: Settings },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
-  const [tier, setTier] = useState<PlanTier | null>(null)
-
-  useEffect(() => {
-    async function loadTier() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('organization_id')
-        .eq('id', user.id)
-        .single()
-
-      if (profile?.organization_id) {
-        const { data: org } = await supabase
-          .from('organizations')
-          .select('subscription_tier')
-          .eq('id', profile.organization_id)
-          .single()
-
-        if (org?.subscription_tier) {
-          setTier(org.subscription_tier as PlanTier)
-        }
-      }
-    }
-    loadTier()
-  }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/auth/login')
   }
 
-  const plan = tier ? PLAN_FEATURES[tier] : null
-
   return (
     <aside className="w-60 min-h-screen bg-dark-sidebar flex flex-col flex-shrink-0">
       <div className="h-16 bg-brand flex items-center px-6">
-        <span className="text-white font-bold text-xl tracking-tight">EventPulse</span>
+        <span className="text-white font-bold text-xl tracking-tight">Engage Terminal</span>
       </div>
 
-      <nav className="flex-1 pt-4">
-        {nav.map(({ href, label, icon: Icon, gate }) => {
+      <div className="px-4 pt-4 pb-2">
+        <p className="text-[10px] uppercase tracking-widest text-[#555560] px-2">Matlama Marketing</p>
+      </div>
+
+      <nav className="flex-1">
+        {nav.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + '/')
-          const locked = gate && plan ? !(plan as any)[gate] : false
 
           return (
             <Link
               key={href}
-              href={locked ? '#' : href}
-              onClick={locked ? (e) => e.preventDefault() : undefined}
+              href={href}
               className={`flex items-center gap-3 h-12 text-sm transition-colors ${
-                locked
-                  ? 'text-[#555560] cursor-not-allowed pl-6'
-                  : active
-                    ? 'bg-brand/15 text-brand font-semibold border-l-[3px] border-brand pl-[21px]'
-                    : 'text-[#a6a6b2] hover:text-gray-200 hover:bg-white/5 pl-6'
+                active
+                  ? 'bg-brand/15 text-brand font-semibold border-l-[3px] border-brand pl-[21px]'
+                  : 'text-[#a6a6b2] hover:text-gray-200 hover:bg-white/5 pl-6'
               }`}
             >
               <Icon size={16} />
               {label}
-              {locked && <Lock size={12} className="ml-auto mr-6 opacity-50" />}
             </Link>
           )
         })}
       </nav>
 
-      {/* Plan badge */}
-      {plan && (
-        <div className="px-4 mb-2">
-          <div className="bg-white/5 rounded-lg px-3 py-2 flex items-center justify-between">
-            <span className="text-[11px] text-[#a6a6b2]">Plan</span>
-            <span className="text-[11px] font-semibold text-brand">{plan.name}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Pulse AI - only for Max tier */}
       <div className="px-4 mb-3">
-        {tier === 'max' ? (
-          <button className="w-full bg-brand/20 hover:bg-brand/30 text-brand rounded-lg px-3 py-3.5 text-[13px] font-semibold flex items-center gap-2.5 transition-colors">
-            <Zap size={14} />
-            Ask Pulse AI
-          </button>
-        ) : (
-          <div className="w-full bg-white/5 rounded-lg px-3 py-3.5 text-[13px] text-[#555560] flex items-center gap-2.5">
-            <Zap size={14} />
-            <span>Pulse AI</span>
-            <Lock size={11} className="ml-auto opacity-50" />
-          </div>
-        )}
+        <button className="w-full bg-brand/20 hover:bg-brand/30 text-brand rounded-lg px-3 py-3.5 text-[13px] font-semibold flex items-center gap-2.5 transition-colors">
+          <Zap size={14} />
+          Ask Engage AI
+        </button>
       </div>
 
       <div className="px-4 pb-4 border-t border-white/5 pt-3">

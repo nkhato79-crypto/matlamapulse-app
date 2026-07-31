@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
-export default function NewVendorPage() {
+export default function NewCreatorPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
@@ -35,7 +35,7 @@ export default function NewVendorPage() {
     const data = await res.json()
 
     if (!res.ok) {
-      alert(data.error || 'Failed to add vendor')
+      alert(data.error || 'Failed to add creator')
       setLoading(false)
     } else {
       router.push(`/vendors/${data.id}`)
@@ -45,54 +45,50 @@ export default function NewVendorPage() {
   const update = (field: string, value: string | boolean) =>
     setForm(prev => ({ ...prev, [field]: value }))
 
-  const categories = [
-    'Catering', 'Decor', 'Photography', 'Videography', 'DJ / Music',
-    'Venue', 'Florist', 'MC / Host', 'Sound & Lighting', 'Transport',
-    'Security', 'Printing', 'Cake', 'Other',
+  const niches = [
+    'Lifestyle', 'Fashion', 'Beauty', 'Tech', 'Food', 'Fitness',
+    'Travel', 'Finance', 'Gaming', 'Music', 'Comedy', 'Education',
+    'Parenting', 'Health', 'Other',
   ]
 
   return (
-    <div className="p-8 max-w-3xl">
-      <div className="flex items-center gap-3 mb-8">
-        <Link href="/vendors" className="text-gray-400 hover:text-dark">
+    <div>
+      <div className="bg-white px-8 h-16 flex items-center gap-3 border-b border-[#e5e5eb]">
+        <Link href="/vendors" className="text-[#80808c] hover:text-[#26262e] transition-colors">
           <ArrowLeft size={18} />
         </Link>
-        <div>
-          <h1 className="text-2xl font-bold text-dark">Add Vendor</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Add a new vendor to your database</p>
-        </div>
+        <h1 className="text-xl font-bold text-[#1a1a1f]">Add Creator</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Info */}
+      <form onSubmit={handleSubmit} className="p-6 max-w-3xl space-y-6">
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-dark mb-4">Vendor Details</h2>
+          <h2 className="font-semibold text-dark mb-4">Creator Details</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Vendor / Company Name *</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Creator / Handle Name *</label>
               <input
                 required
                 value={form.name}
                 onChange={e => update('name', e.target.value)}
-                placeholder="e.g. Premier Catering Co"
+                placeholder="e.g. @thando_creates"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Category</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Niche</label>
               <select
                 value={form.category}
                 onChange={e => update('category', e.target.value)}
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-white"
               >
-                <option value="">Select category</option>
-                {categories.map(cat => (
-                  <option key={cat}>{cat}</option>
+                <option value="">Select niche</option>
+                {niches.map(niche => (
+                  <option key={niche}>{niche}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">City</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Location</label>
               <input
                 value={form.city}
                 onChange={e => update('city', e.target.value)}
@@ -108,22 +104,21 @@ export default function NewVendorPage() {
                   onChange={e => update('is_preferred', e.target.checked)}
                   className="rounded border-gray-300 text-brand focus:ring-brand"
                 />
-                Mark as preferred vendor
+                Mark as preferred creator
               </label>
             </div>
           </div>
         </div>
 
-        {/* Contact */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="font-semibold text-dark mb-4">Contact Information</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Contact Person</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Full Name</label>
               <input
                 value={form.contact_name}
                 onChange={e => update('contact_name', e.target.value)}
-                placeholder="Full name"
+                placeholder="Creator's real name"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
@@ -153,17 +148,17 @@ export default function NewVendorPage() {
                 type="email"
                 value={form.email}
                 onChange={e => update('email', e.target.value)}
-                placeholder="vendor@company.co.za"
+                placeholder="creator@email.com"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Website</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Profile / Portfolio URL</label>
               <input
                 type="url"
                 value={form.website}
                 onChange={e => update('website', e.target.value)}
-                placeholder="https://"
+                placeholder="https://linktr.ee/creator"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
@@ -172,20 +167,19 @@ export default function NewVendorPage() {
               <input
                 value={form.address}
                 onChange={e => update('address', e.target.value)}
-                placeholder="Street address"
+                placeholder="Street address (for gifting / product drops)"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
           </div>
         </div>
 
-        {/* Notes */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="font-semibold text-dark mb-4">Notes</h2>
           <textarea
             value={form.notes}
             onChange={e => update('notes', e.target.value)}
-            placeholder="Any additional notes about this vendor"
+            placeholder="Content style, engagement rate, past brand collabs, platform strengths..."
             rows={3}
             className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand resize-none"
           />
@@ -203,7 +197,7 @@ export default function NewVendorPage() {
             disabled={loading}
             className="flex-1 bg-brand hover:bg-brand-dark text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-60 text-sm"
           >
-            {loading ? 'Adding...' : 'Add Vendor'}
+            {loading ? 'Adding...' : 'Add Creator'}
           </button>
         </div>
       </form>

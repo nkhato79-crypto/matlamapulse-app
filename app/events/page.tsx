@@ -3,24 +3,24 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { Plus, Calendar, MapPin, Users } from 'lucide-react'
+import { Plus, Megaphone, Calendar, Users } from 'lucide-react'
 
-type EventStatus = 'all' | 'active' | 'planning' | 'draft' | 'completed'
+type CampaignStatus = 'all' | 'active' | 'planning' | 'draft' | 'completed'
 
-export default function EventsPage() {
+export default function CampaignsPage() {
   const supabase = createClient()
-  const [events, setEvents] = useState<any[] | null>(null)
-  const [filter, setFilter] = useState<EventStatus>('all')
+  const [campaigns, setCampaigns] = useState<any[] | null>(null)
+  const [filter, setFilter] = useState<CampaignStatus>('all')
 
   useEffect(() => {
-    async function fetchEvents() {
+    async function fetchCampaigns() {
       const { data } = await supabase
         .from('events')
         .select('*')
         .order('event_date', { ascending: true })
-      setEvents(data)
+      setCampaigns(data)
     }
-    fetchEvents()
+    fetchCampaigns()
   }, [])
 
   const statusBadge = (status: string) => {
@@ -34,28 +34,26 @@ export default function EventsPage() {
     }
   }
 
-  const tabs: EventStatus[] = ['all', 'active', 'planning', 'draft', 'completed']
+  const tabs: CampaignStatus[] = ['all', 'active', 'planning', 'draft', 'completed']
 
-  const filteredEvents = events?.filter(e =>
+  const filteredCampaigns = campaigns?.filter(e =>
     filter === 'all' ? true : e.status === filter
   )
 
   return (
     <div>
-      {/* Top header bar */}
       <div className="bg-white px-8 h-16 flex items-center justify-between border-b border-[#e5e5eb]">
-        <h1 className="text-xl font-bold text-[#1a1a1f]">Events</h1>
+        <h1 className="text-xl font-bold text-[#1a1a1f]">Campaigns</h1>
         <Link
           href="/events/new"
           className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-md text-[13px] font-semibold transition-colors"
         >
           <Plus size={14} />
-          New Event
+          New Campaign
         </Link>
       </div>
 
       <div className="p-6">
-        {/* Filter tabs */}
         <div className="flex gap-2 mb-6">
           {tabs.map(tab => (
             <button
@@ -72,14 +70,14 @@ export default function EventsPage() {
           ))}
         </div>
 
-        {!filteredEvents || filteredEvents.length === 0 ? (
+        {!filteredCampaigns || filteredCampaigns.length === 0 ? (
           <div className="bg-white rounded-lg py-20 text-center">
-            <Calendar size={40} className="text-[#ededf2] mx-auto mb-4" />
+            <Megaphone size={40} className="text-[#ededf2] mx-auto mb-4" />
             <h3 className="font-semibold text-[#1a1a1f] mb-1">
-              {filter === 'all' ? 'No events yet' : `No ${filter} events`}
+              {filter === 'all' ? 'No campaigns yet' : `No ${filter} campaigns`}
             </h3>
             <p className="text-[#80808c] text-[13px] mb-4">
-              {filter === 'all' ? 'Create your first event to get started' : 'No events match this filter'}
+              {filter === 'all' ? 'Create your first brand campaign to get started' : 'No campaigns match this filter'}
             </p>
             {filter === 'all' && (
               <Link
@@ -87,48 +85,48 @@ export default function EventsPage() {
                 className="inline-flex items-center gap-2 bg-brand text-white px-4 py-2 rounded-md text-[13px] font-semibold hover:bg-brand-dark transition-colors"
               >
                 <Plus size={14} />
-                Create Event
+                Create Campaign
               </Link>
             )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredEvents.map(event => (
-              <Link key={event.id} href={`/events/${event.id}`}>
+            {filteredCampaigns.map(campaign => (
+              <Link key={campaign.id} href={`/events/${campaign.id}`}>
                 <div className="bg-white rounded-lg hover:shadow-md transition-all p-5 cursor-pointer">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold text-[#1a1a1f] text-[13px] leading-tight">{event.name}</h3>
-                    <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ml-2 flex-shrink-0 ${statusBadge(event.status)}`}>
-                      {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                    <h3 className="font-semibold text-[#1a1a1f] text-[13px] leading-tight">{campaign.name}</h3>
+                    <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ml-2 flex-shrink-0 ${statusBadge(campaign.status)}`}>
+                      {campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}
                     </span>
                   </div>
                   <div className="space-y-1.5">
-                    {event.event_date && (
+                    {campaign.event_date && (
                       <div className="flex items-center gap-2 text-[11px] text-[#80808c]">
                         <Calendar size={11} />
-                        {new Date(event.event_date).toLocaleDateString('en-ZA', {
+                        {new Date(campaign.event_date).toLocaleDateString('en-ZA', {
                           day: 'numeric', month: 'long', year: 'numeric'
                         })}
                       </div>
                     )}
-                    {event.venue_name && (
+                    {campaign.venue_name && (
                       <div className="flex items-center gap-2 text-[11px] text-[#80808c]">
-                        <MapPin size={11} />
-                        {event.venue_name}
+                        <Megaphone size={11} />
+                        {campaign.venue_name}
                       </div>
                     )}
-                    {event.guest_count > 0 && (
+                    {campaign.guest_count > 0 && (
                       <div className="flex items-center gap-2 text-[11px] text-[#80808c]">
                         <Users size={11} />
-                        {event.guest_count} guests
+                        {campaign.guest_count.toLocaleString()} target reach
                       </div>
                     )}
                   </div>
-                  {event.budget && (
+                  {campaign.budget && (
                     <div className="mt-3 pt-3 border-t border-[#ededf2]">
-                      <p className="text-[11px] text-[#80808c]">Budget</p>
+                      <p className="text-[11px] text-[#80808c]">Campaign Budget</p>
                       <p className="text-[13px] font-semibold text-[#1a1a1f]">
-                        R{Number(event.budget).toLocaleString('en-ZA')}
+                        R{Number(campaign.budget).toLocaleString('en-ZA')}
                       </p>
                     </div>
                   )}

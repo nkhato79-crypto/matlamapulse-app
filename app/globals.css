@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --brand: #D94635;
-  --brand-dark: #B83528;
-  --brand-muted: #FDF1F0;
+  --brand: #6366F1;
+  --brand-dark: #4F46E5;
+  --brand-muted: #EEF2FF;
   --sidebar: #101012;
   --dark: #1A1A1E;
 }
@@ -23,6 +23,6 @@ body {
 
 /* Focus ring */
 :focus-visible {
-  outline: 2px solid #D94635;
+  outline: 2px solid #6366F1;
   outline-offset: 2px;
 }
