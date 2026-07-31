@@ -8,9 +8,9 @@ const VALID_PLANS = ['standard', 'pro', 'max'] as const
 type PlanKey = (typeof VALID_PLANS)[number]
 
 const PLAN_LABELS: Record<PlanKey, { name: string; price: string }> = {
-  standard: { name: 'Standard', price: 'R299/mo' },
-  pro: { name: 'Pro', price: 'R999/mo' },
-  max: { name: 'Max', price: 'R2,999/mo' },
+  standard: { name: 'Starter', price: 'R499/mo' },
+  pro: { name: 'Growth', price: 'R1,499/mo' },
+  max: { name: 'Agency', price: 'R3,999/mo' },
 }
 
 function GoogleIcon() {
@@ -116,40 +116,38 @@ function RegisterForm() {
 
   return (
     <div className="min-h-screen bg-dark-sidebar flex">
-      {/* Left — branding */}
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 bg-dark-sidebar">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">EP</span>
+            <span className="text-white font-bold text-sm">ET</span>
           </div>
-          <span className="text-white font-semibold text-lg">EventPulse</span>
+          <span className="text-white font-semibold text-lg">Engage Terminal</span>
         </div>
 
         <div>
           <h1 className="text-4xl font-bold text-white leading-tight mb-4">
-            Vendor coordination,<br />
-            <span className="text-brand">finally simple.</span>
+            Creator clusters,<br />
+            <span className="text-brand">maximum reach.</span>
           </h1>
           <p className="text-gray-400 text-lg">
-            Manage vendors, track tasks, send WhatsApp RSVPs — all in one place built for SA event planners.
+            Manage micro-influencer campaigns, track deliverables, automate cross-platform posting — built for SA agencies.
           </p>
         </div>
 
         <div className="flex gap-8 text-sm text-gray-500">
-          <span>500+ Events managed</span>
-          <span>48+ Vendor categories</span>
-          <span>WhatsApp RSVP built-in</span>
+          <span>500+ Campaigns managed</span>
+          <span>10K+ Creators rostered</span>
+          <span>Cross-platform automation</span>
         </div>
       </div>
 
-      {/* Right — register form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-sm">
           <div className="flex lg:hidden items-center gap-3 mb-8">
             <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">EP</span>
+              <span className="text-white font-bold text-sm">ET</span>
             </div>
-            <span className="font-semibold text-lg">EventPulse</span>
+            <span className="font-semibold text-lg">Engage Terminal</span>
           </div>
 
           <div className="flex items-center justify-between mb-2">
@@ -163,7 +161,6 @@ function RegisterForm() {
             <a href="/plan-finder" className="text-brand hover:underline">Not the right plan?</a>
           </p>
 
-          {/* Google Sign Up */}
           <button
             onClick={handleGoogleSignUp}
             disabled={loading}
@@ -186,19 +183,19 @@ function RegisterForm() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Lucky Nkhathoo"
+                placeholder="Your full name"
                 required
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Company / organisation name</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Agency name</label>
               <input
                 type="text"
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
-                placeholder="Your Organization"
+                placeholder="Your Agency"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />
             </div>
@@ -209,7 +206,7 @@ function RegisterForm() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.co.za"
+                placeholder="you@agency.co.za"
                 required
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />

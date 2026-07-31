@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'EventPulse — Vendor Coordination for Event Planners',
-  description: 'Streamline your event vendor management with EventPulse. Coordinate vendors, track tasks, send WhatsApp RSVPs — all in one place.',
+  title: 'Engage Terminal — Micro-Influencer Campaign Management',
+  description: 'Manage creator clusters, coordinate brand campaigns, and automate cross-platform posting. Built for social media marketing agencies.',
 }
 
 export default function RootLayout({

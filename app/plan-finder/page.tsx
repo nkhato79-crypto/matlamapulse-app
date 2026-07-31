@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, CalendarDays, Store, Eye, MessageCircleMore, Sparkles, ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react'
+import { Users, Megaphone, Target, Eye, Zap, Sparkles, ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 type Option = { text: string; tier: number }
@@ -12,7 +12,7 @@ const QUESTIONS: { id: string; label: string; icon: any; prompt: string; options
     id: 'team',
     label: 'Team',
     icon: Users,
-    prompt: 'Besides you, how many people need their own login to run events?',
+    prompt: 'Besides you, how many people need their own login to manage campaigns?',
     options: [
       { text: 'Just me', tier: 0 },
       { text: '2 – 5 people', tier: 1 },
@@ -21,9 +21,9 @@ const QUESTIONS: { id: string; label: string; icon: any; prompt: string; options
   },
   {
     id: 'events',
-    label: 'Events',
-    icon: CalendarDays,
-    prompt: 'How many events do you typically run at once?',
+    label: 'Campaigns',
+    icon: Megaphone,
+    prompt: 'How many brand campaigns do you typically run at once?',
     options: [
       { text: 'Up to 5', tier: 0 },
       { text: '6 – 15', tier: 1 },
@@ -32,41 +32,42 @@ const QUESTIONS: { id: string; label: string; icon: any; prompt: string; options
   },
   {
     id: 'vendors',
-    label: 'Vendors',
-    icon: Store,
-    prompt: 'How many vendors do you coordinate through the platform?',
+    label: 'Creators',
+    icon: Target,
+    prompt: 'How many creators are in your roster?',
     options: [
-      { text: 'Up to 5', tier: 0 },
-      { text: 'Up to 15', tier: 1 },
-      { text: 'More than 15', tier: 2 },
+      { text: 'Up to 10', tier: 0 },
+      { text: 'Up to 50', tier: 1 },
+      { text: 'More than 50', tier: 2 },
     ],
   },
   {
     id: 'clients',
-    label: 'Client access',
+    label: 'Brand access',
     icon: Eye,
-    prompt: 'Do your clients need their own read-only view of event progress?',
+    prompt: 'Do your brand clients need their own read-only view of campaign progress?',
     options: [
       { text: "No, they don't need a login", tier: 0 },
-      { text: 'Yes, one client at a time', tier: 1 },
-      { text: 'Yes, several clients at once', tier: 2 },
+      { text: 'Yes, one brand at a time', tier: 1 },
+      { text: 'Yes, several brands at once', tier: 2 },
     ],
   },
   {
     id: 'rsvp',
-    label: 'RSVP',
-    icon: MessageCircleMore,
-    prompt: 'Do you need built-in guest RSVP management?',
+    label: 'Automation',
+    icon: Zap,
+    prompt: 'Do you need automated cross-platform posting via PhoneClaw?',
     options: [
-      { text: 'No', tier: 0 },
-      { text: 'Yes', tier: 1 },
+      { text: 'No, manual posting is fine', tier: 0 },
+      { text: 'Yes, for select campaigns', tier: 1 },
+      { text: 'Yes, across all campaigns', tier: 2 },
     ],
   },
   {
     id: 'custom',
     label: 'Custom',
     icon: Sparkles,
-    prompt: 'Do you need white-label branding or one-off custom features?',
+    prompt: 'Do you need white-label branding or custom analytics dashboards?',
     options: [
       { text: 'No', tier: 0 },
       { text: 'Yes', tier: 2 },
@@ -78,26 +79,26 @@ const PLANS = [
   {
     tier: 0,
     key: 'standard',
-    name: 'Standard',
-    price: 'R299',
-    tagline: 'For solo organisers running a tight roster',
-    features: ['1 user', '5 active events', '5 vendors', 'No client read-only access', 'No RSVP service', 'No Xero integration'],
+    name: 'Starter',
+    price: 'R499',
+    tagline: 'For solo agencies getting started with creator clusters',
+    features: ['1 user', '5 active campaigns', '10 creators', 'No brand portal access', 'No automation', 'Basic deliverable tracking'],
   },
   {
     tier: 1,
     key: 'pro',
-    name: 'Pro',
-    price: 'R999',
-    tagline: 'For growing teams juggling several events',
-    features: ['5 team members', '1 read-only client', '15 events', '15 vendors', 'RSVP service included', 'No Xero integration'],
+    name: 'Growth',
+    price: 'R1,499',
+    tagline: 'For growing agencies managing multiple brand campaigns',
+    features: ['5 team members', '1 brand portal', '15 campaigns', '50 creators', 'PhoneClaw automation', 'Full analytics + Engage AI'],
   },
   {
     tier: 2,
     key: 'max',
-    name: 'Max',
-    price: 'R2,999',
-    tagline: 'For full-scale production houses',
-    features: ['Team of 15', 'Unlimited events', 'Unlimited vendors', 'Unlimited read-only clients', 'Full feature access + early access to new features', 'Customisable features', 'Xero integration (rolling out soon)'],
+    name: 'Agency',
+    price: 'R3,999',
+    tagline: 'For full-scale agencies running creator clusters at volume',
+    features: ['Team of 15', 'Unlimited campaigns', 'Unlimited creators', 'Unlimited brand portals', 'Full automation + custom scripts', 'White-label branding + priority support'],
   },
 ]
 
@@ -157,11 +158,11 @@ export default function PlanFinderPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
             <div className="w-7 h-7 bg-brand rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xs">EP</span>
+              <span className="text-white font-bold text-xs">ET</span>
             </div>
-            <span className="text-dark font-semibold">EventPulse</span>
+            <span className="text-dark font-semibold">Engage Terminal</span>
           </div>
-          <h1 className="text-2xl font-bold text-dark">Find the plan that fits how you run events</h1>
+          <h1 className="text-2xl font-bold text-dark">Find the plan that fits how you run campaigns</h1>
           <p className="text-gray-500 text-sm mt-1">Six quick questions, no commitment</p>
         </div>
 

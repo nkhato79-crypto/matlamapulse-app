@@ -6,17 +6,17 @@ import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
 import {
-  LayoutDashboard, Calendar, Users, CheckSquare,
+  LayoutDashboard, Megaphone, Users, ListChecks,
   BarChart2, Settings, LogOut, Zap, Lock
 } from 'lucide-react'
 
 const nav = [
-  { href: '/dashboard', label: 'Dashboard',  icon: LayoutDashboard, gate: null },
-  { href: '/events',    label: 'Events',     icon: Calendar,        gate: null },
-  { href: '/vendors',   label: 'Vendors',    icon: Users,           gate: null },
-  { href: '/tasks',     label: 'Tasks',      icon: CheckSquare,     gate: null },
-  { href: '/reports',   label: 'Reports',    icon: BarChart2,       gate: 'hasReports' as const },
-  { href: '/settings',  label: 'Settings',   icon: Settings,        gate: null },
+  { href: '/dashboard', label: 'Dashboard',    icon: LayoutDashboard, gate: null },
+  { href: '/events',    label: 'Campaigns',     icon: Megaphone,       gate: null },
+  { href: '/vendors',   label: 'Creators',      icon: Users,           gate: null },
+  { href: '/tasks',     label: 'Deliverables',  icon: ListChecks,      gate: null },
+  { href: '/reports',   label: 'Analytics',     icon: BarChart2,       gate: 'hasReports' as const },
+  { href: '/settings',  label: 'Settings',      icon: Settings,        gate: null },
 ]
 
 export default function Sidebar() {
@@ -61,7 +61,7 @@ export default function Sidebar() {
   return (
     <aside className="w-60 min-h-screen bg-dark-sidebar flex flex-col flex-shrink-0">
       <div className="h-16 bg-brand flex items-center px-6">
-        <span className="text-white font-bold text-xl tracking-tight">EventPulse</span>
+        <span className="text-white font-bold text-xl tracking-tight">Engage Terminal</span>
       </div>
 
       <nav className="flex-1 pt-4">
@@ -90,7 +90,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Plan badge */}
       {plan && (
         <div className="px-4 mb-2">
           <div className="bg-white/5 rounded-lg px-3 py-2 flex items-center justify-between">
@@ -100,17 +99,16 @@ export default function Sidebar() {
         </div>
       )}
 
-      {/* Pulse AI - only for Max tier */}
       <div className="px-4 mb-3">
         {tier === 'max' ? (
           <button className="w-full bg-brand/20 hover:bg-brand/30 text-brand rounded-lg px-3 py-3.5 text-[13px] font-semibold flex items-center gap-2.5 transition-colors">
             <Zap size={14} />
-            Ask Pulse AI
+            Ask Engage AI
           </button>
         ) : (
           <div className="w-full bg-white/5 rounded-lg px-3 py-3.5 text-[13px] text-[#555560] flex items-center gap-2.5">
             <Zap size={14} />
-            <span>Pulse AI</span>
+            <span>Engage AI</span>
             <Lock size={11} className="ml-auto opacity-50" />
           </div>
         )}

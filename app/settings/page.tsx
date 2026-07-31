@@ -132,14 +132,14 @@ export default function SettingsPage() {
       {organization && (
         <form onSubmit={handleSaveOrg} className="bg-white rounded-lg p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-dark">Organization</h2>
+            <h2 className="font-semibold text-dark">Agency</h2>
             <span className="text-xs font-semibold text-brand bg-brand-muted px-2.5 py-1 rounded-full capitalize">
               {organization.subscription_tier} plan
             </span>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Organization Name</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Agency Name</label>
               <input
                 value={orgForm.name}
                 onChange={e => setOrgForm(f => ({ ...f, name: e.target.value }))}

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
-export default function NewEventPage() {
+export default function NewCampaignPage() {
   const router = useRouter()
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
@@ -73,38 +73,38 @@ export default function NewEventPage() {
         <Link href="/events" className="text-[#80808c] hover:text-[#26262e] transition-colors">
           <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-xl font-bold text-[#1a1a1f]">New Event</h1>
+        <h1 className="text-xl font-bold text-[#1a1a1f]">New Campaign</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 max-w-3xl space-y-6">
-        {/* Basic Info */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-dark mb-4">Basic Information</h2>
+          <h2 className="font-semibold text-dark mb-4">Campaign Details</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Event Name *</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Campaign Name *</label>
               <input
                 required
                 value={form.name}
                 onChange={e => update('name', e.target.value)}
-                placeholder="e.g. Corporate Gala 2026"
+                placeholder="e.g. Summer Skincare Push — GlowCo"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Event Type</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Campaign Type</label>
               <select
                 value={form.event_type}
                 onChange={e => update('event_type', e.target.value)}
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-white"
               >
                 <option value="">Select type</option>
-                <option>Corporate</option>
-                <option>Wedding</option>
-                <option>Birthday</option>
-                <option>Conference</option>
                 <option>Product Launch</option>
-                <option>Year End Function</option>
+                <option>Brand Awareness</option>
+                <option>Affiliate / CPA</option>
+                <option>UGC Content</option>
+                <option>Seasonal Promo</option>
+                <option>Event Coverage</option>
+                <option>Always-On</option>
                 <option>Other</option>
               </select>
             </div>
@@ -121,7 +121,7 @@ export default function NewEventPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Event Date</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Launch Date</label>
               <input
                 type="date"
                 value={form.event_date}
@@ -130,7 +130,7 @@ export default function NewEventPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Start Time</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Post Time</label>
               <input
                 type="time"
                 value={form.event_time}
@@ -150,70 +150,68 @@ export default function NewEventPage() {
           </div>
         </div>
 
-        {/* Venue */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-dark mb-4">Venue</h2>
+          <h2 className="font-semibold text-dark mb-4">Brand Info</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Venue Name</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Brand Name</label>
               <input
                 value={form.venue_name}
                 onChange={e => update('venue_name', e.target.value)}
-                placeholder="e.g. Sandton Convention Centre"
+                placeholder="e.g. GlowCo Skincare"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Address</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Brand Website</label>
               <input
                 value={form.venue_address}
                 onChange={e => update('venue_address', e.target.value)}
-                placeholder="Street address"
+                placeholder="https://glowco.co.za"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">City</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Industry</label>
               <input
                 value={form.venue_city}
                 onChange={e => update('venue_city', e.target.value)}
-                placeholder="e.g. Johannesburg"
+                placeholder="e.g. Beauty & Skincare"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
           </div>
         </div>
 
-        {/* Budget & Guests */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-dark mb-4">Budget & Guests</h2>
+          <h2 className="font-semibold text-dark mb-4">Budget & Reach</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Total Budget (ZAR)</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Campaign Budget (ZAR)</label>
               <input
                 type="number"
                 value={form.budget}
                 onChange={e => update('budget', e.target.value)}
-                placeholder="e.g. 150000"
+                placeholder="e.g. 25000"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Guest Count</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Target Reach</label>
               <input
                 type="number"
                 value={form.guest_count}
                 onChange={e => update('guest_count', e.target.value)}
-                placeholder="e.g. 250"
+                placeholder="e.g. 50000"
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-dark mb-1.5">Description</label>
+              <label className="block text-sm font-medium text-dark mb-1.5">Campaign Brief</label>
               <textarea
                 value={form.description}
                 onChange={e => update('description', e.target.value)}
-                placeholder="Brief description of the event"
+                placeholder="Describe the campaign goals, key messages, and deliverables expected from creators"
                 rows={3}
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand resize-none"
               />
@@ -233,7 +231,7 @@ export default function NewEventPage() {
             disabled={loading}
             className="flex-1 bg-brand hover:bg-brand-dark text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-60 text-sm"
           >
-            {loading ? 'Creating...' : 'Create Event'}
+            {loading ? 'Creating...' : 'Create Campaign'}
           </button>
         </div>
       </form>

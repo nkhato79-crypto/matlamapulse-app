@@ -3,48 +3,48 @@ export type PlanTier = 'standard' | 'pro' | 'max'
 export const PLAN_FEATURES: Record<PlanTier, {
   name: string
   price: string
-  maxEvents: number
-  maxVendors: number
+  maxCampaigns: number
+  maxCreators: number
   maxUsers: number
   hasReports: boolean
-  hasRSVP: boolean
-  hasPulseAI: boolean
+  hasBrandApproval: boolean
+  hasEngageAI: boolean
   hasWhatsApp: boolean
   hasTimeline: boolean
 }> = {
   standard: {
-    name: 'Standard',
-    price: 'R299/mo',
-    maxEvents: 5,
-    maxVendors: 5,
+    name: 'Starter',
+    price: 'R499/mo',
+    maxCampaigns: 3,
+    maxCreators: 10,
     maxUsers: 1,
     hasReports: false,
-    hasRSVP: false,
-    hasPulseAI: false,
+    hasBrandApproval: false,
+    hasEngageAI: false,
     hasWhatsApp: false,
     hasTimeline: false,
   },
   pro: {
-    name: 'Pro',
-    price: 'R999/mo',
-    maxEvents: 15,
-    maxVendors: 15,
+    name: 'Growth',
+    price: 'R1,499/mo',
+    maxCampaigns: 15,
+    maxCreators: 50,
     maxUsers: 5,
     hasReports: true,
-    hasRSVP: true,
-    hasPulseAI: false,
+    hasBrandApproval: true,
+    hasEngageAI: false,
     hasWhatsApp: true,
     hasTimeline: true,
   },
   max: {
-    name: 'Max',
-    price: 'R2,999/mo',
-    maxEvents: 999999,
-    maxVendors: 999999,
+    name: 'Agency',
+    price: 'R3,999/mo',
+    maxCampaigns: 999999,
+    maxCreators: 999999,
     maxUsers: 15,
     hasReports: true,
-    hasRSVP: true,
-    hasPulseAI: true,
+    hasBrandApproval: true,
+    hasEngageAI: true,
     hasWhatsApp: true,
     hasTimeline: true,
   },
