@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Engage Terminal — Micro-Influencer Campaign Management',
-  description: 'Manage creator clusters, coordinate brand campaigns, and automate cross-platform posting. Built for social media marketing agencies.',
+  title: 'Engage Terminal — Matlama Marketing Concepts',
+  description: 'In-house campaign management for Matlama Marketing Concepts. Manage creator clusters, brand campaigns, and cross-platform posting.',
 }
 
 export default function RootLayout({

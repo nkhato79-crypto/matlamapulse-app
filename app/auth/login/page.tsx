@@ -83,15 +83,11 @@ export default function LoginPage() {
             <span className="text-brand">maximum reach.</span>
           </h1>
           <p className="text-gray-400 text-lg">
-            Manage micro-influencer campaigns, track deliverables, automate cross-platform posting — built for SA agencies.
+            Matlama Marketing Concepts — managing micro-influencer campaigns, tracking deliverables, and automating cross-platform posting.
           </p>
         </div>
 
-        <div className="flex gap-8 text-sm text-gray-500">
-          <span>500+ Campaigns managed</span>
-          <span>10K+ Creators rostered</span>
-          <span>Cross-platform automation</span>
-        </div>
+        <p className="text-sm text-gray-500">Matlama Marketing Concepts &mdash; Internal Use Only</p>
       </div>
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
@@ -130,7 +126,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="you@agency.co.za"
+                placeholder="you@matlama.co.za"
                 required
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />
@@ -171,13 +167,6 @@ export default function LoginPage() {
           >
             Email me a login link instead
           </button>
-
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Don&apos;t have an account?{' '}
-            <a href="/plan-finder" className="text-brand font-medium hover:underline">
-              Start free trial
-            </a>
-          </p>
         </div>
       </div>
     </div>

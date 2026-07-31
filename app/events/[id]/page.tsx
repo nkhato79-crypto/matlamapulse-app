@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Zap, Lock } from 'lucide-react'
-import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
+import { Zap } from 'lucide-react'
 
 const allTabs = ['Overview', 'Creators', 'Deliverables', 'Timeline', 'Approval']
 
@@ -17,27 +16,9 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
   const [creators, setCreators] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState('Overview')
   const [loading, setLoading] = useState(true)
-  const [tier, setTier] = useState<PlanTier>('standard')
 
   useEffect(() => {
     async function fetchData() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('organization_id')
-          .eq('id', user.id)
-          .single()
-        if (profile?.organization_id) {
-          const { data: org } = await supabase
-            .from('organizations')
-            .select('subscription_tier')
-            .eq('id', profile.organization_id)
-            .single()
-          if (org?.subscription_tier) setTier(org.subscription_tier as PlanTier)
-        }
-      }
-
       const { data: campaignData } = await supabase
         .from('events')
         .select('*')
@@ -148,30 +129,22 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
 
       <div className="bg-white px-8 border-b border-[#e5e5eb]">
         <div className="flex gap-8">
-          {allTabs.map(tab => {
-            const plan = PLAN_FEATURES[tier]
-            const locked = (tab === 'Approval' && !plan.hasBrandApproval) || (tab === 'Timeline' && !plan.hasTimeline)
-
-            return (
-              <button
-                key={tab}
-                onClick={() => !locked && setActiveTab(tab)}
-                className={`py-3.5 text-[14px] relative transition-colors flex items-center gap-1.5 ${
-                  locked
-                    ? 'text-[#c5c5ce] cursor-not-allowed'
-                    : activeTab === tab
-                      ? 'text-brand font-semibold'
-                      : 'text-[#80808c] hover:text-[#26262e]'
-                }`}
-              >
-                {tab}
-                {locked && <Lock size={11} />}
-                {activeTab === tab && !locked && (
-                  <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-brand rounded-t" />
-                )}
-              </button>
-            )
-          })}
+          {allTabs.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`py-3.5 text-[14px] relative transition-colors ${
+                activeTab === tab
+                  ? 'text-brand font-semibold'
+                  : 'text-[#80808c] hover:text-[#26262e]'
+              }`}
+            >
+              {tab}
+              {activeTab === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-brand rounded-t" />
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -346,32 +319,22 @@ export default function CampaignDetailPage({ params }: { params: { id: string } 
             </p>
           </div>
 
-          {PLAN_FEATURES[tier].hasEngageAI ? (
-            <div className="bg-[#1a1a1f] rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Zap size={12} className="text-white" />
-                <p className="text-[13px] font-bold text-white">Engage AI</p>
-              </div>
-              <div className="bg-[#33333d] rounded-md p-3 mb-3">
-                <p className="text-[11px] text-[#ccccd9] leading-relaxed">
-                  {creators.filter((v: any) => v.status === 'pending').length > 0
-                    ? `${creators.filter((v: any) => v.status === 'pending').length} creators haven't confirmed yet. Send reminders?`
-                    : 'All creators confirmed. Ready to launch!'}
-                </p>
-              </div>
-              <button className="w-full bg-brand hover:bg-brand-dark rounded py-1.5 text-[11px] text-white/70 transition-colors">
-                Ask Engage AI anything...
-              </button>
+          <div className="bg-[#1a1a1f] rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Zap size={12} className="text-white" />
+              <p className="text-[13px] font-bold text-white">Engage AI</p>
             </div>
-          ) : (
-            <div className="bg-[#f7f7fa] rounded-lg p-4 text-center">
-              <Lock size={16} className="text-[#a6a6b2] mx-auto mb-2" />
-              <p className="text-[11px] text-[#80808c]">Engage AI requires the Agency plan</p>
-              <Link href="/settings" className="text-[11px] text-brand hover:underline font-medium">
-                Upgrade
-              </Link>
+            <div className="bg-[#33333d] rounded-md p-3 mb-3">
+              <p className="text-[11px] text-[#ccccd9] leading-relaxed">
+                {creators.filter((v: any) => v.status === 'pending').length > 0
+                  ? `${creators.filter((v: any) => v.status === 'pending').length} creators haven't confirmed yet. Send reminders?`
+                  : 'All creators confirmed. Ready to launch!'}
+              </p>
             </div>
-          )}
+            <button className="w-full bg-brand hover:bg-brand-dark rounded py-1.5 text-[11px] text-white/70 transition-colors">
+              Ask Engage AI anything...
+            </button>
+          </div>
         </div>
       </div>
     </div>

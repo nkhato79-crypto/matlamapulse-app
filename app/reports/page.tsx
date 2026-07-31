@@ -1,33 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { PLAN_FEATURES, type PlanTier } from '@/lib/plans'
-import UpgradeGate from '@/components/UpgradeGate'
 
 export default async function AnalyticsPage() {
   const supabase = createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  let tier: PlanTier = 'standard'
-
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single()
-
-    if (profile?.organization_id) {
-      const { data: org } = await supabase
-        .from('organizations')
-        .select('subscription_tier')
-        .eq('id', profile.organization_id)
-        .single()
-      if (org?.subscription_tier) tier = org.subscription_tier as PlanTier
-    }
-  }
-
-  if (!PLAN_FEATURES[tier].hasReports) {
-    return <UpgradeGate currentTier={tier} requiredTier="pro" feature="Analytics" />
-  }
 
   const [{ data: campaigns }, { data: deliverables }, { data: creators }] = await Promise.all([
     supabase.from('events').select('*'),

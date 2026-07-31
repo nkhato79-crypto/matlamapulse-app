@@ -89,7 +89,6 @@ export default function SettingsPage() {
       </div>
 
       <div className="p-6 max-w-3xl">
-      {/* Profile */}
       <form onSubmit={handleSaveProfile} className="bg-white rounded-lg p-6 mb-6">
         <h2 className="font-semibold text-dark mb-4">Your Profile</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -128,15 +127,9 @@ export default function SettingsPage() {
         </button>
       </form>
 
-      {/* Organization */}
       {organization && (
-        <form onSubmit={handleSaveOrg} className="bg-white rounded-lg p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-dark">Agency</h2>
-            <span className="text-xs font-semibold text-brand bg-brand-muted px-2.5 py-1 rounded-full capitalize">
-              {organization.subscription_tier} plan
-            </span>
-          </div>
+        <form onSubmit={handleSaveOrg} className="bg-white rounded-lg p-6">
+          <h2 className="font-semibold text-dark mb-4">Agency Details</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="block text-sm font-medium text-dark mb-1.5">Agency Name</label>
@@ -179,26 +172,9 @@ export default function SettingsPage() {
             disabled={saving}
             className="mt-4 bg-brand hover:bg-brand-dark text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors disabled:opacity-60"
           >
-            {saving ? 'Saving...' : 'Save Organization'}
+            {saving ? 'Saving...' : 'Save Agency Details'}
           </button>
         </form>
-      )}
-
-      {/* Subscription Info */}
-      {organization && (
-        <div className="bg-white rounded-lg p-6">
-          <h2 className="font-semibold text-[#1a1a1f] mb-4">Subscription</h2>
-          <div className="flex items-center gap-8">
-            <div>
-              <p className="text-[11px] text-[#80808c]">Current Plan</p>
-              <p className="text-lg font-bold text-[#1a1a1f] capitalize">{organization.subscription_tier}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-[#80808c]">Status</p>
-              <p className="text-lg font-bold text-[#1a1a1f] capitalize">{organization.subscription_status}</p>
-            </div>
-          </div>
-        </div>
       )}
       </div>
     </div>

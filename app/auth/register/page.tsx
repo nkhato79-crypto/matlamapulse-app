@@ -1,17 +1,8 @@
 'use client'
 
-import { Suspense, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-
-const VALID_PLANS = ['standard', 'pro', 'max'] as const
-type PlanKey = (typeof VALID_PLANS)[number]
-
-const PLAN_LABELS: Record<PlanKey, { name: string; price: string }> = {
-  standard: { name: 'Starter', price: 'R499/mo' },
-  pro: { name: 'Growth', price: 'R1,499/mo' },
-  max: { name: 'Agency', price: 'R3,999/mo' },
-}
 
 function GoogleIcon() {
   return (
@@ -24,18 +15,11 @@ function GoogleIcon() {
   )
 }
 
-function RegisterForm() {
+export default function RegisterPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const supabase = createClient()
 
-  const planParam = searchParams.get('plan')
-  const plan: PlanKey = (VALID_PLANS as readonly string[]).includes(planParam ?? '')
-    ? (planParam as PlanKey)
-    : 'standard'
-
   const [fullName, setFullName] = useState('')
-  const [organizationName, setOrganizationName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -49,7 +33,7 @@ function RegisterForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?plan=${plan}`,
+        redirectTo: `${window.location.origin}/api/auth/callback`,
       },
     })
 
@@ -76,10 +60,9 @@ function RegisterForm() {
       options: {
         data: {
           full_name: fullName,
-          organization_name: organizationName,
-          plan,
+          organization_name: 'Matlama Marketing Concepts',
         },
-        emailRedirectTo: `${window.location.origin}/api/auth/callback?plan=${plan}`,
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
       },
     })
 
@@ -107,7 +90,7 @@ function RegisterForm() {
           <h1 className="text-xl font-bold text-dark mb-2">Check your email</h1>
           <p className="text-gray-500 text-sm">
             We&apos;ve sent a confirmation link to <span className="font-medium text-dark">{email}</span>.
-            Click it to activate your {PLAN_LABELS[plan].name} account.
+            Click it to activate your account.
           </p>
         </div>
       </div>
@@ -130,15 +113,11 @@ function RegisterForm() {
             <span className="text-brand">maximum reach.</span>
           </h1>
           <p className="text-gray-400 text-lg">
-            Manage micro-influencer campaigns, track deliverables, automate cross-platform posting — built for SA agencies.
+            Matlama Marketing Concepts — managing micro-influencer campaigns, tracking deliverables, and automating cross-platform posting.
           </p>
         </div>
 
-        <div className="flex gap-8 text-sm text-gray-500">
-          <span>500+ Campaigns managed</span>
-          <span>10K+ Creators rostered</span>
-          <span>Cross-platform automation</span>
-        </div>
+        <p className="text-sm text-gray-500">Matlama Marketing Concepts &mdash; Internal Use Only</p>
       </div>
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
@@ -150,16 +129,8 @@ function RegisterForm() {
             <span className="font-semibold text-lg">Engage Terminal</span>
           </div>
 
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-bold text-dark">Start your trial</h2>
-            <span className="text-xs font-semibold text-brand bg-brand-muted px-2.5 py-1 rounded-full">
-              {PLAN_LABELS[plan].name} &middot; {PLAN_LABELS[plan].price}
-            </span>
-          </div>
-          <p className="text-gray-500 mb-6">
-            14 days free, no card required.{' '}
-            <a href="/plan-finder" className="text-brand hover:underline">Not the right plan?</a>
-          </p>
+          <h2 className="text-2xl font-bold text-dark mb-2">Join the team</h2>
+          <p className="text-gray-500 mb-6">Create your Engage Terminal account</p>
 
           <button
             onClick={handleGoogleSignUp}
@@ -190,23 +161,12 @@ function RegisterForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark mb-1.5">Agency name</label>
-              <input
-                type="text"
-                value={organizationName}
-                onChange={(e) => setOrganizationName(e.target.value)}
-                placeholder="Your Agency"
-                className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-              />
-            </div>
-
-            <div>
               <label className="block text-sm font-medium text-dark mb-1.5">Email address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@agency.co.za"
+                placeholder="you@matlama.co.za"
                 required
                 className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               />
@@ -234,7 +194,7 @@ function RegisterForm() {
               disabled={loading}
               className="w-full bg-brand hover:bg-brand-dark text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-60"
             >
-              {loading ? 'Creating your account...' : 'Start free trial'}
+              {loading ? 'Creating your account...' : 'Create account'}
             </button>
           </form>
 
@@ -245,13 +205,5 @@ function RegisterForm() {
         </div>
       </div>
     </div>
-  )
-}
-
-export default function RegisterPage() {
-  return (
-    <Suspense fallback={null}>
-      <RegisterForm />
-    </Suspense>
   )
 }
