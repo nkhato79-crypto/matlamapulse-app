@@ -31,7 +31,7 @@ export default function NewCampaignPage() {
     setLoading(true)
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/auth/login'); return }
+    if (!user) { router.push('/auth/register'); return }
 
     const { data: profile } = await supabase
       .from('profiles')

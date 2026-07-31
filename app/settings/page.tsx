@@ -17,7 +17,7 @@ export default function SettingsPage() {
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/login'); return }
+      if (!user) { router.push('/auth/register'); return }
 
       const { data: p } = await supabase
         .from('profiles')

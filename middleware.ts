@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
   // Redirect unauthenticated users to login
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    url.pathname = '/auth/register'
     return NextResponse.redirect(url)
   }
 

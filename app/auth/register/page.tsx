@@ -156,8 +156,7 @@ export default function RegisterPage() {
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
-            Already have an account?{' '}
-            <a href="/auth/login" className="text-brand font-medium hover:underline">Sign in</a>
+            Matlama Marketing Concepts &mdash; Internal Use Only
           </p>
         </div>
       </div>
